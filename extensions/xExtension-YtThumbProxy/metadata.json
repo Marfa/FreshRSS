@@ -1,0 +1,8 @@
+{
+  "name": "YtThumbProxy",
+  "author": "themarfa",
+  "description": "Proxy YouTube thumbnails via local nginx when ytimg CDN is unreachable for clients.",
+  "version": "1.0.0",
+  "entrypoint": "YtThumbProxy",
+  "type": "user"
+}

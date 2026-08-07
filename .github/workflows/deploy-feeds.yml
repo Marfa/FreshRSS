@@ -1,0 +1,129 @@
+name: Build and deploy feeds
+
+# Image is built on GitHub runners and pushed to GHCR.
+# VPS only pulls the image and reloads the container (no build on the server).
+
+on:
+  push:
+    branches: [edge]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-feeds
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/marfa/freshrss
+  DEPLOY_DIR: /opt/freshrss
+
+jobs:
+  build:
+    name: Build GHCR image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get FreshRSS version
+        run: |
+          FRESHRSS_VERSION=$(sed -n "s/^const FRESHRSS_VERSION = '\(.*\)'.*$/\1/p" constants.php)
+          echo "FRESHRSS_VERSION=$FRESHRSS_VERSION" >> "$GITHUB_ENV"
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=edge,enable=${{ github.ref == 'refs/heads/edge' }}
+            type=sha,prefix=sha-,format=short
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Docker/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            FRESHRSS_VERSION=${{ env.FRESHRSS_VERSION }}
+            SOURCE_COMMIT=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Make GHCR package public (anonymous pull on VPS)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method PUT \
+            -H "Accept: application/vnd.github+json" \
+            "/user/packages/container/freshrss/visibility" \
+            -f visibility=public
+
+  deploy:
+    name: Deploy to VPS
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout deploy assets
+        uses: actions/checkout@v7
+
+      - name: Upload compose and nginx snippet
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source: "deploy/docker-compose.yml,deploy/nginx/freshrss-ytcdn.conf"
+          target: /tmp/freshrss-deploy
+          strip_components: 1
+
+      - name: Pull image and reload
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script_stop: true
+          command_timeout: 15m
+          script: |
+            set -euo pipefail
+            DEPLOY_DIR=/opt/freshrss
+            IMAGE=ghcr.io/marfa/freshrss
+            mkdir -p "$DEPLOY_DIR"
+            install -m 0644 /tmp/freshrss-deploy/docker-compose.yml "$DEPLOY_DIR/docker-compose.yml"
+            touch "$DEPLOY_DIR/.env"
+
+            SNIP=/etc/nginx/snippets/freshrss-ytcdn.conf
+            if [ -f /tmp/freshrss-deploy/nginx/freshrss-ytcdn.conf ]; then
+              cp -a "$SNIP" "${SNIP}.bak.$(date +%s)" 2>/dev/null || true
+              install -m 0644 /tmp/freshrss-deploy/nginx/freshrss-ytcdn.conf "$SNIP"
+              nginx -t
+              systemctl reload nginx
+            fi
+
+            cd "$DEPLOY_DIR"
+            docker pull "$IMAGE:edge"
+            docker compose up -d --remove-orphans
+            docker image prune -f
+            docker ps --filter name=freshrss --format '{{.Names}} {{.Image}} {{.Status}}'
+            curl -sS -o /dev/null -w 'local:%{http_code}\n' http://127.0.0.1:8083/ || true

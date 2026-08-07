@@ -3,3 +3,15 @@
 !.htaccess
 !index.html
 !README.md
+!xExtension-FixDupHostThumb/
+!xExtension-FixDupHostThumb/**
+!xExtension-GridView/
+!xExtension-GridView/**
+!xExtension-LlmClassification/
+!xExtension-LlmClassification/**
+!xExtension-Youlag/
+!xExtension-Youlag/**
+!xExtension-YtPlayFallback/
+!xExtension-YtPlayFallback/**
+!xExtension-YtThumbProxy/
+!xExtension-YtThumbProxy/**

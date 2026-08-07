@@ -1,5 +1,9 @@
 [![Liberapay donations](https://img.shields.io/liberapay/receives/FreshRSS.svg?logo=liberapay)](https://liberapay.com/FreshRSS/donate)
 
+> **Marfa fork** for [feeds.themarfa.name](https://feeds.themarfa.name): custom YouTube/LLM extensions + GHCR auto-deploy (build on GitHub, pull on VPS). See [`deploy/`](deploy/).
+>
+> Код подготовлен с помощью Cursor · [Донат](https://www.donationalerts.com/r/themarfa) · [Крипта](https://nowpayments.io/donation/themarfa)
+
 * Read this document on [github.com/FreshRSS/FreshRSS/](https://github.com/FreshRSS/FreshRSS/blob/edge/README.md) to get the correct links and pictures.
 * [Version française](README.fr.md)
 

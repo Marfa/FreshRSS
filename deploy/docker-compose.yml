@@ -1,0 +1,26 @@
+# feeds.themarfa.name — pull-only deploy (image built in GitHub Actions → GHCR)
+services:
+  freshrss:
+    image: ghcr.io/marfa/freshrss:edge
+    container_name: freshrss
+    hostname: freshrss
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: 10m
+    volumes:
+      - data:/var/www/FreshRSS/data
+    ports:
+      - "127.0.0.1:8083:80"
+    env_file:
+      - .env
+    environment:
+      TZ: Europe/Moscow
+      CRON_MIN: "5,35"
+      TRUSTED_PROXY: "127.0.0.1 172.16.0.1/12 192.168.0.1/16"
+
+volumes:
+  data:
+    # Keep existing named volume from previous official-image install
+    external: true
+    name: freshrss_data

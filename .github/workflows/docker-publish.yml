@@ -14,6 +14,9 @@ permissions:
 
 jobs:
   build-container-image:
+    # Upstream multi-arch publish is only for FreshRSS org.
+    # Marfa/FreshRSS builds amd64 → GHCR and deploys via deploy-feeds.yml.
+    if: github.repository_owner == 'FreshRSS'
     name: Build Docker image ${{ matrix.name }}
     runs-on: ubuntu-latest
     strategy:

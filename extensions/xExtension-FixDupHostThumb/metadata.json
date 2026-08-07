@@ -1,0 +1,8 @@
+{
+  "name": "FixDupHostThumb",
+  "author": "themarfa",
+  "description": "Fix broken RSS thumbnails where the host is duplicated in the path (e.g. example.com/example.com/...).",
+  "version": "1.0.0",
+  "entrypoint": "FixDupHostThumb",
+  "type": "user"
+}

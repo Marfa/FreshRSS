@@ -1,0 +1,8 @@
+{
+  "name": "YtPlayFallback",
+  "author": "themarfa",
+  "description": "Try multiple Invidious/Piped instances for Youlag playback when video proxy is enabled; leave YouTube alone when disabled.",
+  "version": "1.1.1",
+  "entrypoint": "YtPlayFallback",
+  "type": "user"
+}
