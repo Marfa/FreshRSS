@@ -19,6 +19,8 @@ parameters:
 			- extensions/node_modules?
 			- extensions/symbolic?
 			- extensions/vendor?
+			# Instance / third-party extensions (not FreshRSS core typing)
+			- extensions/xExtension-*
 			- node_modules/*?
 			- vendor/*
 	bootstrapFiles:
