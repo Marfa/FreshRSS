@@ -168,6 +168,7 @@ class YoulagExtension extends Minz_Extension
 
         // Add Youlag theme and script to all extension pages
         Minz_View::appendStyle($this->getFileUrl("theme.min.css"));
+        Minz_View::appendStyle($this->getFileUrl("card-layout-fix.css"));
         Minz_View::appendScript($this->getFileUrl("script.min.js"));
 
         // Required user settings to properly render Youlag styling

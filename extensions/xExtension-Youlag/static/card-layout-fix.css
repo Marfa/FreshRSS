@@ -1,0 +1,59 @@
+/**
+ * Contain Youlag card text inside each grid tile.
+ * Without min-width:0 / overflow:hidden, long titles expand the grid
+ * item past its track and bleed into neighboring cards (e.g. Favorites).
+ */
+
+body.youlag-active:not(.reader) main#stream div.flux {
+	min-width: 0;
+	max-width: 100%;
+	width: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+body.youlag-active:not(.reader) main#stream div.flux .flux_header {
+	min-width: 0;
+	width: 100%;
+	max-width: 100%;
+	overflow: hidden;
+	align-self: stretch;
+	box-sizing: border-box;
+}
+
+body.youlag-active:not(.reader) main#stream div.flux .flux_header .item.titleAuthorSummaryDate {
+	flex: 0 0 100%;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+body.youlag-active:not(.reader) main#stream div.flux .flux_header .item.titleAuthorSummaryDate a.item-element.title {
+	min-width: 0;
+	max-width: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+body.youlag-active:not(.reader) main#stream div.flux .flux_header .item.titleAuthorSummaryDate .author,
+body.youlag-active:not(.reader) main#stream div.flux .flux_header .item.titleAuthorSummaryDate span.item-element.date,
+body.youlag-active:not(.reader) main#stream div.flux .flux_header .item.titleAuthorSummaryDate span.item-element.date time {
+	max-width: 100%;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Keep action buttons on their own row under the title, fixed height */
+body.youlag-active:not(.reader) main#stream div.flux .flux_header li.item.manage,
+body.youlag-active:not(.reader) main#stream div.flux .flux_header li.item.link,
+body.youlag-active:not(.reader) main#stream div.flux .flux_header li.item.labels,
+body.youlag-active:not(.reader) main#stream div.flux .flux_header li.item.share {
+	flex: 1 1 0;
+	align-self: center;
+	height: 34px;
+	max-height: 34px;
+	min-width: 0;
+}
