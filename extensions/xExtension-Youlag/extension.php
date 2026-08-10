@@ -82,7 +82,7 @@ class YoulagExtension extends Minz_Extension
      * Enable Youlag update check
      * @var bool
      */
-    public $yl_update_check_enabled = true;
+    public $yl_update_check_enabled = false;
 
     protected array $csp_policies = [
         "connect-src" =>
@@ -225,19 +225,8 @@ class YoulagExtension extends Minz_Extension
         $val = FreshRSS_Context::userConf()->attributeArray(
             "yl_category_whitelist",
         );
-        $attributes = is_array(value: FreshRSS_Context::$user_conf->_attributes)
-            ? FreshRSS_Context::$user_conf->_attributes
-            : [];
-        // Default video mode to ['all'] when Youlag is activated for the first time.
-        if (
-            !is_array(value: $val) ||
-            (is_array(value: $val) &&
-                count(value: $val) === 0 &&
-                !array_key_exists(
-                    key: "yl_category_whitelist",
-                    array: $attributes,
-                ))
-        ) {
+        // null = never configured → default ['all']; [] = user cleared whitelist
+        if ($val === null) {
             $this->yl_category_whitelist = ["all"];
         } else {
             $this->yl_category_whitelist = $val;
@@ -325,7 +314,7 @@ class YoulagExtension extends Minz_Extension
             "yl_update_check_enabled",
         );
         $this->yl_update_check_enabled =
-            $updateCheckEnabled === null ? true : $updateCheckEnabled;
+            $updateCheckEnabled === null ? false : $updateCheckEnabled;
     }
 
     /**
@@ -1238,10 +1227,10 @@ class YoulagExtension extends Minz_Extension
                 Minz_Request::paramBoolean("yl_block_youtube_shorts", true),
             );
 
-            // Youlag update check
+            // Youlag update check (off by default — fork does not need upstream polls)
             $updateCheckEnabled = Minz_Request::paramBoolean(
                 "yl_update_check_enabled",
-                true,
+                false,
             );
             FreshRSS_Context::userConf()->_attribute(
                 "yl_update_check_enabled",

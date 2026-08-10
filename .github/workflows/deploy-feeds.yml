@@ -1,7 +1,7 @@
 name: Build and deploy feeds
 
 # Image is built on GitHub runners and pushed to GHCR.
-# VPS only pulls the image and reloads the container (no build on the server).
+# VPS pulls the image and blue-green reloads (idle slot → nginx switch → stop old).
 
 on:
   push:
@@ -85,18 +85,18 @@ jobs:
       - name: Checkout deploy assets
         uses: actions/checkout@v7
 
-      - name: Upload compose and nginx snippet
+      - name: Upload compose and deploy script
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
-          source: "deploy/docker-compose.yml,deploy/nginx/freshrss-ytcdn.conf"
+          source: "deploy/docker-compose.yml,deploy/blue-green-deploy.sh"
           target: /tmp/freshrss-deploy
           strip_components: 1
 
-      - name: Pull image and reload
+      - name: Pull image and blue-green reload
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -108,22 +108,15 @@ jobs:
           script: |
             set -euo pipefail
             DEPLOY_DIR=/opt/freshrss
-            IMAGE=ghcr.io/marfa/freshrss
             mkdir -p "$DEPLOY_DIR"
             install -m 0644 /tmp/freshrss-deploy/docker-compose.yml "$DEPLOY_DIR/docker-compose.yml"
+            install -m 0755 /tmp/freshrss-deploy/blue-green-deploy.sh "$DEPLOY_DIR/blue-green-deploy.sh"
             touch "$DEPLOY_DIR/.env"
 
-            SNIP=/etc/nginx/snippets/freshrss-ytcdn.conf
-            if [ -f /tmp/freshrss-deploy/nginx/freshrss-ytcdn.conf ]; then
-              cp -a "$SNIP" "${SNIP}.bak.$(date +%s)" 2>/dev/null || true
-              install -m 0644 /tmp/freshrss-deploy/nginx/freshrss-ytcdn.conf "$SNIP"
-              nginx -t
-              systemctl reload nginx
+            # nginx snippets (ytcdn, upstream) are managed on the VPS — not overwritten each deploy
+            if ! grep -Rqs 'freshrss-upstream.conf' /etc/nginx/sites-enabled/ /etc/nginx/sites-available/ 2>/dev/null; then
+              echo "⚠️  missing include snippets/freshrss-upstream.conf in nginx site" >&2
             fi
 
             cd "$DEPLOY_DIR"
-            docker pull "$IMAGE:edge"
-            docker compose up -d --remove-orphans
-            docker image prune -f
-            docker ps --filter name=freshrss --format '{{.Names}} {{.Image}} {{.Status}}'
-            curl -sS -o /dev/null -w 'local:%{http_code}\n' http://127.0.0.1:8083/ || true
+            DEPLOY_DIR="$DEPLOY_DIR" IMAGE=ghcr.io/marfa/freshrss:edge ./blue-green-deploy.sh

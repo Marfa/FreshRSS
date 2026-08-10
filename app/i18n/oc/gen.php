@@ -186,6 +186,7 @@ return array(
 		),
 		'labels_empty' => 'No labels',	// TODO
 		'new_article' => 'I a d’articles nòus disponibles, clicatz per actualizar la pagina.',
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'JavaScript deu èsser activat',
 		'unsafe_csp_header' => 'The CSP header in use is unsafe and FreshRSS may be vulnerable to XSS attacks. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">See documentation</a>',	// TODO
 	),

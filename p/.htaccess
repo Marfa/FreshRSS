@@ -34,9 +34,15 @@ AddDefaultCharset	UTF-8
 	<FilesMatch "\.php$">
 		ExpiresActive	Off
 	</FilesMatch>
+	<Files "build-id.txt">
+		ExpiresActive	Off
+	</Files>
 </IfModule>
 
 <IfModule mod_headers.c>
+	<Files "build-id.txt">
+		Header set Cache-Control "no-store"
+	</Files>
 	<FilesMatch "\.(css|gif|html|ico|js|png|svg|woff|woff2)$">
 		Header	merge Cache-Control "public"
 		<If "%{QUERY_STRING} =~ /^[0-9]+$/">

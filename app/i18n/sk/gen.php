@@ -194,6 +194,7 @@ return array(
 		),
 		'labels_empty' => 'Žiadne štítky',
 		'new_article' => 'Našli sa nové články. Kliknite na obnovenie stránky.',
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'Musíte povoliť JavaScript',
 		'unsafe_csp_header' => 'The CSP header in use is unsafe and FreshRSS may be vulnerable to XSS attacks. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">See documentation</a>',	// TODO
 	),

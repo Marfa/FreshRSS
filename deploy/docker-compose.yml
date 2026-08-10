@@ -1,23 +1,36 @@
-# feeds.themarfa.name — pull-only deploy (image built in GitHub Actions → GHCR)
+# feeds.themarfa.name — blue-green pull-only deploy
+# Active slot via nginx snippet freshrss-upstream.conf (8083=a, 8087=b).
+# Port 8084 is paymentbot — do not reuse.
+# Only one slot receives traffic; both share freshrss_data (SQLite — keep overlap short).
+
+x-freshrss: &freshrss
+  image: ghcr.io/marfa/freshrss:edge
+  restart: unless-stopped
+  mem_limit: 256m
+  logging:
+    options:
+      max-size: 10m
+  volumes:
+    - data:/var/www/FreshRSS/data
+  env_file:
+    - .env
+  environment:
+    TZ: Europe/Moscow
+    CRON_MIN: "5,35"
+    TRUSTED_PROXY: "127.0.0.1 172.16.0.1/12 192.168.0.1/16"
+
 services:
-  freshrss:
-    image: ghcr.io/marfa/freshrss:edge
-    container_name: freshrss
-    hostname: freshrss
-    restart: unless-stopped
-    logging:
-      options:
-        max-size: 10m
-    volumes:
-      - data:/var/www/FreshRSS/data
+  freshrss-a:
+    <<: *freshrss
+    container_name: freshrss-a
     ports:
       - "127.0.0.1:8083:80"
-    env_file:
-      - .env
-    environment:
-      TZ: Europe/Moscow
-      CRON_MIN: "5,35"
-      TRUSTED_PROXY: "127.0.0.1 172.16.0.1/12 192.168.0.1/16"
+
+  freshrss-b:
+    <<: *freshrss
+    container_name: freshrss-b
+    ports:
+      - "127.0.0.1:8087:80"
 
 volumes:
   data:

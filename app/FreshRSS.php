@@ -146,6 +146,14 @@ class FreshRSS extends Minz_FrontController {
 			FreshRSS_View::prependScript(Minz_Url::display('/scripts/extra.js?' . @filemtime(PUBLIC_PATH . '/scripts/extra.js')));
 		}
 		FreshRSS_View::prependScript(Minz_Url::display('/scripts/main.js?' . @filemtime(PUBLIC_PATH . '/scripts/main.js')));
+		if (is_readable(PUBLIC_PATH . '/build-id.txt')) {
+			FreshRSS_View::appendScript(
+				Minz_Url::display('/scripts/instance_update.js?' . @filemtime(PUBLIC_PATH . '/scripts/instance_update.js')),
+				false,
+				true,
+				false
+			);
+		}
 	}
 
 	public static function preLayout(): void {

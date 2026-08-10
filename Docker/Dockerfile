@@ -20,7 +20,10 @@ COPY --chown=root:www-data . /var/www/FreshRSS
 COPY ./Docker/*.Apache.conf /etc/apache2/sites-available/
 
 ARG FRESHRSS_VERSION
-ARG SOURCE_COMMIT
+ARG SOURCE_COMMIT=unknown
+
+# Deploy build stamp for zero-downtime update banner (polled by instance_update.js)
+RUN printf '%s\n' "$SOURCE_COMMIT" > /var/www/FreshRSS/p/build-id.txt
 
 LABEL \
 	org.opencontainers.image.description="A self-hosted RSS feed aggregator" \

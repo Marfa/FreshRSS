@@ -194,6 +194,7 @@ return array(
 		),
 		'labels_empty' => 'Нет меток',
 		'new_article' => 'Появились новые статьи. Нажмите, чтобы обновить страницу.',
+		'instance_update' => 'Доступно обновление. Обновить?',
 		'should_be_activated' => 'JavaScript должен быть включён',
 		'unsafe_csp_header' => 'Используемый заголовок CSP небезопасен, и FreshRSS может быть уязвим для XSS-атак. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">См. документацию</a>',
 	),
