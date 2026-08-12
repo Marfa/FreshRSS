@@ -1458,8 +1458,8 @@ input[type="search"] {
 }
 
 #instance-update > a {
-	display: block;
 	padding: 0.75rem 1rem;
+	display: block;
 	color: #fff;
 	font-weight: bold;
 	text-decoration: none;
