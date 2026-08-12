@@ -67,15 +67,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Make GHCR package public (anonymous pull on VPS)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api --method PUT \
-            -H "Accept: application/vnd.github+json" \
-            "/orgs/${{ github.repository_owner }}/packages/container/freshrss/visibility" \
-            -f visibility=public
-
   deploy:
     name: Deploy to VPS
     needs: build
