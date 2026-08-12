@@ -57,3 +57,12 @@ body.youlag-active:not(.reader) main#stream div.flux .flux_header li.item.share 
 	max-height: 34px;
 	min-width: 0;
 }
+
+/* Article list thumbs: theme only set z-index; fill the fixed slot so images paint */
+body.youlag-inactive:not(.reader) main#stream div.flux ul.flux_header .item.thumbnail img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
