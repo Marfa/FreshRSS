@@ -176,9 +176,9 @@ return array(
 			'request_failed' => 'Permintaan gagal, mungkin dikarenakan masalah koneksi internet.',
 			'title_new_articles' => 'FreshRSS: artikel baru!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Tidak ada label',
 		'new_article' => 'Tidak ada artikel baru yang tersedia, klik untuk menyegarkan halaman.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'JavaScript harus diaktifkan',
 		'unsafe_csp_header' => 'The CSP header in use is unsafe and FreshRSS may be vulnerable to XSS attacks. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">See documentation</a>',	// TODO
 	),

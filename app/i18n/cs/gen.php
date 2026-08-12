@@ -192,9 +192,9 @@ return array(
 			'request_failed' => 'Požadavek selhal, to může být způsobeno problémy s připojení k internetu.',
 			'title_new_articles' => 'FreshRSS: nové články!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Žádné štítky',
 		'new_article' => 'Jsou dostupné nové články, klikněte pro obnovení stránky.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'JavaScript musí být povolen',
 		'unsafe_csp_header' => 'The CSP header in use is unsafe and FreshRSS may be vulnerable to XSS attacks. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">See documentation</a>',	// TODO
 	),

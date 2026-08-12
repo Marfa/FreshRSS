@@ -184,9 +184,9 @@ return array(
 			'request_failed' => 'Bir istek başarısız oldu, bu internet bağlantı sorunlarından kaynaklanmış olabilir.',
 			'title_new_articles' => 'FreshRSS: yeni makaleler!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Etiket yok',
 		'new_article' => 'Yeni makaleler mevcut, sayfayı yenilemek için tıklayın.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'JavaScript etkinleştirilmiş olmalı',
 		'unsafe_csp_header' => 'Kullanılan CSP başlığı güvenli değil ve FreshRSS, XSS saldırılarına karşı savunmasız olabilir. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">Belgelere bakın</a>',
 	),

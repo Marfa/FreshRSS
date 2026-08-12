@@ -68,13 +68,12 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Make GHCR package public (anonymous pull on VPS)
-        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api --method PUT \
             -H "Accept: application/vnd.github+json" \
-            "/user/packages/container/freshrss/visibility" \
+            "/orgs/${{ github.repository_owner }}/packages/container/freshrss/visibility" \
             -f visibility=public
 
   deploy:
@@ -98,15 +97,20 @@ jobs:
 
       - name: Pull image and blue-green reload
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.repository_owner }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
+          envs: GHCR_TOKEN,GHCR_USER
           script_stop: true
           command_timeout: 15m
           script: |
             set -euo pipefail
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
             DEPLOY_DIR=/opt/freshrss
             mkdir -p "$DEPLOY_DIR"
             install -m 0644 /tmp/freshrss-deploy/docker-compose.yml "$DEPLOY_DIR/docker-compose.yml"

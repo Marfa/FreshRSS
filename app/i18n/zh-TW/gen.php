@@ -178,9 +178,9 @@ return array(
 			'request_failed' => '請求失敗，有可能是網路連線問題造成的。',
 			'title_new_articles' => 'FreshRSS: 新文章！',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => '無標籤',
 		'new_article' => '有新文章可用，點擊以刷新頁面。',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => '必須啟用 JavaScript',
 		'unsafe_csp_header' => '目前使用的 CSP 標頭不安全，FreshRSS 可能會受到 XSS 攻擊。<a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">請參閱說明文件</a>',
 	),

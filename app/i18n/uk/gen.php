@@ -192,9 +192,9 @@ return array(
 			'request_failed' => 'Не вдалося виконати запит. Можливо, інтернет-зʼєднання нестабільне.',
 			'title_new_articles' => 'FreshRSS: нові статті!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Міток нема',
 		'new_article' => 'Наявні нові статті. Натисніть, щоб оновити сторінку.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'Слід увімкнути JavaScript',
 		'unsafe_csp_header' => 'Через використовуваний CSP-заголовок FreshRSS під загрозою XSS-атак. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">Переглянути документацію</a>',
 	),

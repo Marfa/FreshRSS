@@ -184,9 +184,9 @@ return array(
 			'request_failed' => 'Η αναζήτηση απέτυχε, ελέγξτε για πιθανά προβλήματα με την σύνδεση σας.',
 			'title_new_articles' => 'FreshRSS: Νέα άρθρα!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Χωρίς ετικέτα',
 		'new_article' => 'Υπάρχουν νέα άρθρα διαθέσιμα, πατήστε για ανανέωση της σελίδας.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'Το JavaScript πρέπει να ενεργοποιηθεί',
 		'unsafe_csp_header' => 'Η επικεφαλίδα CSP που χρησιμοποιείται δεν είναι ασφαλής και το FreshRSS μπορεί να είναι ανασφαλές απέναντι σε επιθέσεις XSS. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">Δείτε τις οδηγίες χρήσης</a>',
 	),

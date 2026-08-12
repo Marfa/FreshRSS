@@ -184,9 +184,9 @@ return array(
 			'request_failed' => 'A request has failed, it may have been caused by internet connection problems.',	// TODO
 			'title_new_articles' => 'FreshRSS: מאמרים חדשים!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'No labels',	// TODO
 		'new_article' => 'מאמרים חדשים זמינים, לחצו לרענון העמוד.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'חובה להפעיל JavaScript',
 		'unsafe_csp_header' => 'The CSP header in use is unsafe and FreshRSS may be vulnerable to XSS attacks. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">See documentation</a>',	// TODO
 	),

@@ -184,9 +184,9 @@ return array(
 			'request_failed' => 'Een opdracht is mislukt, mogelijk door Internet verbindings problemen.',
 			'title_new_articles' => 'FreshRSS: nieuwe artikelen!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Geen labels',
 		'new_article' => 'Er zijn nieuwe artikelen beschikbaar. Klik om de pagina te vernieuwen.',
-		'instance_update' => 'Update available. Refresh?',	// TODO
 		'should_be_activated' => 'JavaScript moet aanstaan',
 		'unsafe_csp_header' => 'De gebruikte CSP-header is onveilig en FreshRSS kan kwetsbaar zijn voor XSS-aanvallen. <a target="_blank" href="https://freshrss.github.io/FreshRSS/en/admins/10_ServerConfig.html#security">Zie documentatie</a>',
 	),
