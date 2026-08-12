@@ -1449,8 +1449,8 @@ input[type="search"] {
 #instance-update {
 	position: fixed;
 	top: 0;
-	left: 0;
 	right: 0;
+	left: 0;
 	z-index: 1000;
 	text-align: center;
 	background-color: var(--background-color-new-article, #0084ff);
@@ -1458,8 +1458,8 @@ input[type="search"] {
 }
 
 #instance-update > a {
-	display: block;
 	padding: 0.75rem 1rem;
+	display: block;
 	color: #fff;
 	font-weight: bold;
 	text-decoration: none;
