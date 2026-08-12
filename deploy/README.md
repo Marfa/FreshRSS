@@ -29,5 +29,5 @@ include /etc/nginx/snippets/freshrss-upstream.conf;
 Secrets for Actions: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.
 
 Код подготовлен с помощью Cursor  
-Поддержка проекта Донат https://www.donationalerts.com/r/themarfa  
-Донат криптой https://nowpayments.io/donation/themarfa
+Поддержка проекта [Донат](https://www.donationalerts.com/r/themarfa)  
+Донат [криптой](https://nowpayments.io/donation/themarfa)
