@@ -12,9 +12,12 @@ HEALTH_SLEEP="${HEALTH_SLEEP:-2}"
 
 port_for() {
 	case "$1" in
-		a) echo 8083 ;;
-		b) echo 8087 ;;
-		*) echo "bad slot: $1" >&2; exit 1 ;;
+	a) echo 8083 ;;
+	b) echo 8087 ;;
+	*)
+		echo "bad slot: $1" >&2
+		exit 1
+		;;
 	esac
 }
 
