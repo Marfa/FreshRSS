@@ -15,11 +15,11 @@
 	let pageBuildId = null;
 	let bannerShown = false;
 	let started = false;
-	let timer = null;
 
 	function message() {
-		if (window.context && context.i18n && context.i18n.instance_update) {
-			return context.i18n.instance_update;
+		const ctx = window.context;
+		if (ctx && ctx.i18n && ctx.i18n.instance_update) {
+			return ctx.i18n.instance_update;
 		}
 		return 'Update available. Refresh?';
 	}
@@ -78,7 +78,7 @@
 		}
 		started = true;
 		poll();
-		timer = setInterval(poll, POLL_MS);
+		setInterval(poll, POLL_MS);
 		document.addEventListener('visibilitychange', function () {
 			if (!document.hidden) {
 				poll();
