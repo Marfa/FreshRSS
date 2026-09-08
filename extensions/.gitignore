@@ -3,6 +3,8 @@
 !.htaccess
 !index.html
 !README.md
+!xExtension-FixDoubleEncodedTitles/
+!xExtension-FixDoubleEncodedTitles/**
 !xExtension-FixDupHostThumb/
 !xExtension-FixDupHostThumb/**
 !xExtension-GridView/

@@ -1,0 +1,8 @@
+{
+  "name": "FixDoubleEncodedTitles",
+  "author": "themarfa",
+  "description": "Undo one layer of HTML double-encoding in entry titles (e.g. Don&amp;#039;t → Don&#039;t) from broken feeds.",
+  "version": "1.0.0",
+  "entrypoint": "FixDoubleEncodedTitles",
+  "type": "user"
+}
