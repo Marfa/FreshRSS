@@ -260,6 +260,19 @@ function timeago(int $timestamp, ?int $baseTimestamp = null): string {
 }
 
 /**
+ * Collapse one layer of HTML double-encoding: &amp;ENTITY; → &ENTITY;.
+ * Leaves a correct single &amp; (for "&") alone. Used for broken feeds (e.g. stopgame.ru).
+ */
+function undouble_html_entities(string $text): string {
+	$fixed = preg_replace(
+		'/&amp;((?:#(?:x[0-9a-fA-F]+|[0-9]+)|[a-zA-Z][a-zA-Z0-9]*));/',
+		'&$1;',
+		$text
+	);
+	return is_string($fixed) ? $fixed : $text;
+}
+
+/**
  * Decode HTML entities but preserve XML entities.
  */
 function html_only_entity_decode(?string $text): string {
@@ -271,7 +284,10 @@ function html_only_entity_decode(?string $text): string {
 			get_html_translation_table(HTML_SPECIALCHARS, ENT_NOQUOTES, 'UTF-8')	//Preserve XML entities
 		));
 	}
-	return $text == null ? '' : strtr($text, $htmlEntitiesOnly);
+	if ($text == null) {
+		return '';
+	}
+	return undouble_html_entities(strtr($text, $htmlEntitiesOnly));
 }
 
 /**
