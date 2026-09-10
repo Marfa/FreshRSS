@@ -11,13 +11,15 @@ Applies only when `origin` is `github.com/Marfa/FreshRSS` (this fork / feeds.the
 
 1. Open PRs: `gh pr list --repo Marfa/FreshRSS --state open`
 2. Dependabot: `gh api 'repos/Marfa/FreshRSS/dependabot/alerts?state=open'`
-3. Malware (Dependabot classification): `gh api 'repos/Marfa/FreshRSS/dependabot/alerts?state=open&classification=malware'`
+3. Malware alerts: `gh api 'repos/Marfa/FreshRSS/dependabot/alerts?state=open&classification=malware'`
 4. Code scanning: `gh api 'repos/Marfa/FreshRSS/code-scanning/alerts?state=open'`
 5. Also skim UI: https://github.com/Marfa/FreshRSS/pulls · https://github.com/Marfa/FreshRSS/security/dependabot · https://github.com/Marfa/FreshRSS/security/malware · https://github.com/Marfa/FreshRSS/security/code-scanning
 
 **Fix immediately** — do not leave open Dependabot/security PRs or open alerts. Prefer merge of Dependabot PRs when green; otherwise bump the locked dependency on `edge` and push. For code-scanning alerts, patch root cause in this repo (or dismiss only with a written false-positive reason via API).
 
 Do not push with known open high/critical alerts if a fix is available in-tree.
+
+**Malware alerts toggle:** GitHub has no repo REST field for Dependabot malware alerts yet. If https://github.com/Marfa/FreshRSS/security/malware is empty/disabled, enable manually: Settings → Advanced Security → Dependabot malware alerts → Enable (requires Dependabot alerts first).
 
 ## After every push
 
