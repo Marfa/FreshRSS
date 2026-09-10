@@ -45,6 +45,10 @@
 		"stylelint-order": "^8.1.1",
 		"@stylistic/stylelint-plugin": "^5.3.0"
 	},
+	"overrides": {
+		"colord": "2.9.4",
+		"smol-toml": "1.7.1"
+	},
 	"rtlcssConfig": {
 		"options": {
 			"processUrls": {

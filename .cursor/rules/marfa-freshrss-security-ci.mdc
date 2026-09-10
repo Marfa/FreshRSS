@@ -1,0 +1,28 @@
+---
+description: Before push check PRs/security alerts; after push keep Actions green (Marfa/FreshRSS)
+alwaysApply: true
+---
+
+# Marfa/FreshRSS: security + green CI
+
+Applies only when `origin` is `github.com/Marfa/FreshRSS` (this fork / feeds.themarfa.name).
+
+## Before every `git push` to Marfa/FreshRSS
+
+1. Open PRs: `gh pr list --repo Marfa/FreshRSS --state open`
+2. Dependabot: `gh api 'repos/Marfa/FreshRSS/dependabot/alerts?state=open'`
+3. Malware (Dependabot classification): `gh api 'repos/Marfa/FreshRSS/dependabot/alerts?state=open&classification=malware'`
+4. Code scanning: `gh api 'repos/Marfa/FreshRSS/code-scanning/alerts?state=open'`
+5. Also skim UI: https://github.com/Marfa/FreshRSS/pulls · https://github.com/Marfa/FreshRSS/security/dependabot · https://github.com/Marfa/FreshRSS/security/malware · https://github.com/Marfa/FreshRSS/security/code-scanning
+
+**Fix immediately** — do not leave open Dependabot/security PRs or open alerts. Prefer merge of Dependabot PRs when green; otherwise bump the locked dependency on `edge` and push. For code-scanning alerts, patch root cause in this repo (or dismiss only with a written false-positive reason via API).
+
+Do not push with known open high/critical alerts if a fix is available in-tree.
+
+## After every push
+
+1. `gh run list --repo Marfa/FreshRSS --branch <pushed-branch> --limit 10`
+2. Wait for runs triggered by that push; on failure: `gh run view <id> --log-failed`, fix, commit, push again.
+3. Repeat until every non-skipped workflow for that push is **success** (or intentionally skipped, e.g. Docker publish / Pages gated to FreshRSS org).
+
+Deploy (`deploy-feeds`) must stay green for `edge`.
