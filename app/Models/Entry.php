@@ -167,8 +167,7 @@ class FreshRSS_Entry extends Minz_Model {
 				}
 			}
 		}
-		// Broken feeds (e.g. stopgame.ru) store Don&amp;#039;t; undo one layer for display.
-		return undouble_html_entities($title);
+		return $title;
 	}
 
 	#[Deprecated('Use authors() instead')]
