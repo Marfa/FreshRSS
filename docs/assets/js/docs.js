@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			} else {
 				// Fallback if no HTTPS
 				const input = document.createElement('textarea');
-				input.innerHTML = snippet;
+				input.value = snippet;
 				document.body.append(input);
 				input.select();
 				document.execCommand('copy');

@@ -15,15 +15,40 @@ const init_integration = function () {
 		const shareTypes = event.target.closest('.group-controls').querySelector('select');
 		const shareType = shareTypes.options[shareTypes.selectedIndex];
 		const template = document.getElementById(shareType.getAttribute('data-form') + '-share');
-		let newShare = template.content.cloneNode(true).querySelector('fieldset').outerHTML;
-
-		newShare = newShare.replace(/##label##/g, shareType.text);
-		newShare = newShare.replace(/##type##/g, shareType.value);
-		newShare = newShare.replace(/##help##/g, shareType.getAttribute('data-help'));
-		newShare = newShare.replace(/##key##/g, shares);
-		newShare = newShare.replace(/##method##/g, shareType.getAttribute('data-method'));
-		newShare = newShare.replace(/##field##/g, shareType.getAttribute('data-field'));
-		event.target.closest('fieldset').insertAdjacentHTML('beforebegin', newShare);
+		const fieldset = template.content.cloneNode(true).querySelector('fieldset');
+		const replacements = {
+			'##label##': shareType.text,
+			'##type##': shareType.value,
+			'##help##': shareType.getAttribute('data-help') || '',
+			'##key##': String(shares),
+			'##method##': shareType.getAttribute('data-method') || '',
+			'##field##': shareType.getAttribute('data-field') || '',
+		};
+		const apply = (value) => {
+			let out = value;
+			for (const [token, replacement] of Object.entries(replacements)) {
+				out = out.split(token).join(replacement);
+			}
+			return out;
+		};
+		fieldset.querySelectorAll('*').forEach((el) => {
+			for (const attr of [...el.attributes]) {
+				if (attr.value.includes('##')) {
+					el.setAttribute(attr.name, apply(attr.value));
+				}
+			}
+		});
+		const walker = document.createTreeWalker(fieldset, NodeFilter.SHOW_TEXT);
+		const textNodes = [];
+		while (walker.nextNode()) {
+			textNodes.push(walker.currentNode);
+		}
+		for (const node of textNodes) {
+			if (node.nodeValue && node.nodeValue.includes('##')) {
+				node.nodeValue = apply(node.nodeValue);
+			}
+		}
+		event.target.closest('fieldset').before(fieldset);
 		shares++;
 	});
 

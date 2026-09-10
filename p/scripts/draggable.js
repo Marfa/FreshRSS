@@ -34,7 +34,7 @@ const init_draggable_list = function () {
 			if (dragbox) {
 				source = dragbox;
 			}
-			event.dataTransfer.setData('text/html', source.outerHTML);
+			event.dataTransfer.setData('text/plain', '1');
 			event.dataTransfer.effectAllowed = 'move';
 		}
 	});
@@ -83,11 +83,10 @@ const init_draggable_list = function () {
 
 		const rect = draggableItem.getBoundingClientRect();
 		if (event.clientY < (rect.top + rect.height / 2)) {
-			draggableItem.insertAdjacentHTML('beforebegin', event.dataTransfer.getData('text/html'));
+			draggableItem.before(source);
 		} else {
-			draggableItem.insertAdjacentHTML('afterend', event.dataTransfer.getData('text/html'));
+			draggableItem.after(source);
 		}
-		source.remove();
 		removeMarker();
 		draggableList.submit();
 	});

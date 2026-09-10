@@ -21,6 +21,26 @@ if (!Element.prototype.remove) Element.prototype.remove = function () { if (this
 // </Polyfills>
 
 // <Utils>
+function freshrssSafeUrl(url) {
+	if (!url || typeof url !== 'string') {
+		return '';
+	}
+	const trimmed = url.trim();
+	if (trimmed === '' || trimmed.startsWith('#') || trimmed.startsWith('?') ||
+		trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+		return trimmed;
+	}
+	try {
+		const parsed = new URL(trimmed, location.href);
+		if (parsed.protocol === 'http:' || parsed.protocol === 'https:' || parsed.protocol === 'blob:') {
+			return trimmed;
+		}
+	} catch (ex) {
+		// ignore invalid URL
+	}
+	return '';
+}
+
 function xmlHttpRequestJson(req) {
 	let json = req.response;
 	if (req.responseType !== 'json') {	// IE11
@@ -530,10 +550,14 @@ const freshrssOpenArticleEvent = new Event('freshrss:openArticle', { bubbles: tr
 
 function loadLazyImages(rootElement) {
 	rootElement.querySelectorAll('img[data-original], iframe[data-original], video[data-original], track[data-original]').forEach(function (el) {
+		const original = freshrssSafeUrl(el.getAttribute('data-original') || '');
+		if (!original) {
+			return;
+		}
 		if (el.tagName === 'VIDEO') {
-			el.poster = el.getAttribute('data-original');
+			el.poster = original;
 		} else {
-			el.src = el.getAttribute('data-original');
+			el.src = original;
 		}
 		el.removeAttribute('data-original');
 	});
@@ -1268,7 +1292,7 @@ function init_column_categories() {
 					.innerHTML.replace(/------/g, id);
 				div.insertAdjacentHTML('beforeend', template);
 				dropdownMenu = div.querySelector('.dropdown-menu');
-				dropdownMenu.querySelector('li.website > a').href = feed_web;
+				dropdownMenu.querySelector('li.website > a').href = freshrssSafeUrl(feed_web);
 				dropdownMenu.style.opacity = '0%'; // Hide initially to prevent dropdown flashing
 				if (feed_web == '') {
 					const website = div.querySelector('.item.link.website');

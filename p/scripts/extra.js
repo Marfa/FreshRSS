@@ -2,6 +2,26 @@
 'use strict';
 /* globals context, notifs_html5_is_supported, openNotification, xmlHttpRequestJson */
 
+function freshrssSafeUrl(url) {
+	if (!url || typeof url !== 'string') {
+		return '';
+	}
+	const trimmed = url.trim();
+	if (trimmed === '' || trimmed.startsWith('#') || trimmed.startsWith('?') ||
+		trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+		return trimmed;
+	}
+	try {
+		const parsed = new URL(trimmed, location.href);
+		if (parsed.protocol === 'http:' || parsed.protocol === 'https:' || parsed.protocol === 'blob:') {
+			return trimmed;
+		}
+	} catch (ex) {
+		// ignore invalid URL
+	}
+	return '';
+}
+
 // <crypto form (Web login)>
 function poormanSalt() {	// If crypto.getRandomValues is not available
 	const base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789/abcdefghijklmnopqrstuvwxyz';
@@ -426,8 +446,15 @@ function updateHref(ev) {
 	const shouldEncode = this.getAttribute('data-encode') === '1';
 	const url = prefix + (shouldEncode ? encodeURIComponent(rawUrl) : rawUrl);
 	if (rawUrl.length > 0) {
-		this.href = url;
-		return true;
+		const safe = freshrssSafeUrl(url);
+		if (safe) {
+			this.href = safe;
+			return true;
+		}
+		urlField.focus();
+		this.removeAttribute('href');
+		ev.preventDefault();
+		return false;
 	} else {
 		urlField.focus();
 		this.removeAttribute('href');
@@ -448,7 +475,7 @@ function init_select_observers() {
 	document.querySelectorAll('.select-change').forEach(function (s) {
 		s.onchange = function (ev) {
 			const opt = s.options[s.selectedIndex];
-			const url = opt.getAttribute('data-url');
+			const url = freshrssSafeUrl(opt.getAttribute('data-url') || '');
 			if (url) {
 				s.disabled = true;
 				s.value = '';
