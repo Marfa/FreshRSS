@@ -184,6 +184,7 @@ return array(
 			'request_failed' => 'Sorğu alınmadı, səbəbi internet əlaqəsi problemləri ola bilər.',
 			'title_new_articles' => 'FreshRSS: yeni məqalələr!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Etiket yoxdur',
 		'new_article' => 'Yeni məqalələr mövcuddur, səhifəni yeniləmək üçün klikləyin.',
 		'should_be_activated' => 'JavaScript aktiv olmalıdır',

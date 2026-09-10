@@ -192,6 +192,7 @@ return array(
 			'request_failed' => 'Užklausa nepavyko; tai galėjo lemti interneto ryšio problemos.',
 			'title_new_articles' => 'FreshRSS: nauji straipsniai!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Etikečių nėra',
 		'new_article' => 'Yra naujų straipsnių; spustelėkite, kad atnaujintumėte puslapį.',
 		'should_be_activated' => 'Turi būti įjungtas „JavaScript“',
