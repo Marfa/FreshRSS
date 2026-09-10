@@ -26,6 +26,8 @@ concurrency:
 jobs:
   # Build job
   build:
+    # Upstream docs site only for FreshRSS org; Marfa fork has no Pages.
+    if: github.repository_owner == 'FreshRSS'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,6 +50,7 @@ jobs:
 
   # Deployment job
   deploy:
+    if: github.repository_owner == 'FreshRSS'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
