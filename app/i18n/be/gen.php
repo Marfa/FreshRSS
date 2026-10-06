@@ -192,6 +192,7 @@ return array(
 			'request_failed' => 'Запыт не атрымаўся; магчыма, прычынай былі праблемы з падключэннем да інтэрнэту.',
 			'title_new_articles' => 'FreshRSS: новыя артыкулы!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'Няма метак',
 		'new_article' => 'Даступныя новыя артыкулы, націсніце, каб абнавіць старонку.',
 		'should_be_activated' => 'Неабходна ўключыць JavaScript',

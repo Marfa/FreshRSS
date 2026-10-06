@@ -47,6 +47,11 @@
 		"stylelint-order": "^8.1.1",
 		"svgo": "^4.1.0"
 	},
+	"overrides": {
+		"katex": "0.18.2",
+		"smol-toml": "1.9.0",
+		"source-map-js": "1.2.2"
+	},
 	"rtlcssConfig": {
 		"options": {
 			"processUrls": {
