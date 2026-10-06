@@ -12,9 +12,7 @@ concurrency:
   group: deploy-feeds
   cancel-in-progress: false
 
-permissions:
-  contents: read
-  packages: write
+permissions: {}
 
 env:
   IMAGE: ghcr.io/marfa/freshrss
@@ -24,15 +22,20 @@ jobs:
   build:
     name: Build GHCR image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Checkout source for the Docker build context
+      packages: write # Push the feeds image to GHCR
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v4
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -45,7 +48,7 @@ jobs:
 
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v6
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
           images: ${{ env.IMAGE }}
           tags: |
@@ -53,7 +56,7 @@ jobs:
             type=sha,prefix=sha-,format=short
 
       - name: Build and push
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           file: Docker/Dockerfile
@@ -71,12 +74,17 @@ jobs:
     name: Deploy to VPS
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # Checkout deploy/ assets to upload to the VPS
+      packages: read # Pull the just-built GHCR image on the VPS via GITHUB_TOKEN
     steps:
       - name: Checkout deploy assets
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Upload compose and deploy script
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@917f8b81dfc1ccd331fef9e2d61bdc6c8be94634 # v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -87,7 +95,7 @@ jobs:
           strip_components: 1
 
       - name: Pull image and blue-green reload
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GHCR_USER: ${{ github.repository_owner }}
