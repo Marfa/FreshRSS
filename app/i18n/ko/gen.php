@@ -184,6 +184,7 @@ return array(
 	),
 	'lang' => array(
 		'az' => 'Azərbaycanca',	// IGNORE
+		'be' => 'Беларуская',	// IGNORE
 		'cs' => 'Čeština',	// IGNORE
 		'de' => 'Deutsch',	// IGNORE
 		'el' => 'Ελληνικά',	// IGNORE
