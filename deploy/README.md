@@ -28,6 +28,8 @@ include /etc/nginx/snippets/freshrss-upstream.conf;
 
 Secrets for Actions: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.
 
+Upstream sync: workflow `Sync upstream FreshRSS` (weekly Mon 06:00 UTC + manual) opens a PR into `edge` from `FreshRSS/FreshRSS` `latest` — it never pushes to `edge` directly.
+
 Код подготовлен с помощью Cursor  
 Поддержка проекта [Донат](https://www.donationalerts.com/r/themarfa)  
 Донат [криптой](https://nowpayments.io/donation/themarfa)

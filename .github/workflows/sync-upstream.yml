@@ -1,0 +1,99 @@
+name: Sync upstream FreshRSS
+
+# Opens a PR into edge when FreshRSS/FreshRSS has new commits.
+# Never pushes to edge — review and merge the PR to deploy.
+
+on:
+  schedule:
+    # Monday 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      upstream_ref:
+        description: Upstream branch or tag to merge (e.g. latest, edge, 1.30.2)
+        required: true
+        default: latest
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Open upstream sync PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Push the bot-managed sync branch
+      pull-requests: write # Create or update the sync PR
+    env:
+      UPSTREAM_REPO: https://github.com/FreshRSS/FreshRSS.git
+      SYNC_BRANCH: chore/upstream-latest
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: edge
+
+      - name: Configure git
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git
+
+      - name: Merge upstream and open PR
+        env:
+          UPSTREAM_REF: ${{ inputs.upstream_ref || 'latest' }}
+        run: |
+          set -euo pipefail
+
+          git remote add upstream "$UPSTREAM_REPO"
+          git fetch --no-tags upstream "$UPSTREAM_REF"
+          UPSTREAM_SHA="$(git rev-parse "FETCH_HEAD")"
+          echo "upstream $UPSTREAM_REF @ $UPSTREAM_SHA"
+
+          if git merge-base --is-ancestor "$UPSTREAM_SHA" HEAD; then
+            echo "edge already contains upstream/$UPSTREAM_REF — nothing to do"
+            # Drop a stale open sync PR if we are caught up
+            if gh pr view "$SYNC_BRANCH" --json state --jq .state 2>/dev/null | grep -qx OPEN; then
+              gh pr close "$SYNC_BRANCH" --comment "Closing: edge already contains upstream/\`$UPSTREAM_REF\` ($UPSTREAM_SHA)."
+            fi
+            exit 0
+          fi
+
+          git checkout -B "$SYNC_BRANCH"
+          if ! git merge --no-ff "$UPSTREAM_SHA" -m "Merge upstream FreshRSS $UPSTREAM_REF"; then
+            echo "::error::Merge conflict with upstream/$UPSTREAM_REF ($UPSTREAM_SHA). Resolve locally, then push a PR."
+            git merge --abort || true
+            exit 1
+          fi
+
+          VERSION="$(sed -n "s/^const FRESHRSS_VERSION = '\(.*\)'.*$/\1/p" constants.php)"
+          git push -u origin "HEAD:$SYNC_BRANCH" --force-with-lease
+
+          BODY="$(printf '%s\n' \
+            '## Summary' \
+            "Automated sync from [FreshRSS/FreshRSS](https://github.com/FreshRSS/FreshRSS) \`${UPSTREAM_REF}\` (\`${UPSTREAM_SHA}\`)." \
+            '' \
+            "- FreshRSS version in tree: **${VERSION}**" \
+            '- Target branch: `edge` (merge this PR to build + deploy)' \
+            '' \
+            '## Test plan' \
+            '- [ ] CI green on this PR' \
+            '- [ ] Skim CHANGELOG for breaking changes' \
+            '- [ ] Merge → confirm `deploy-feeds` succeeds')"
+
+          if gh pr view "$SYNC_BRANCH" --json state --jq .state 2>/dev/null | grep -qx OPEN; then
+            gh pr edit "$SYNC_BRANCH" --title "chore: sync upstream FreshRSS $VERSION" --body "$BODY"
+            echo "Updated existing PR for $SYNC_BRANCH"
+          else
+            gh pr create --base edge --head "$SYNC_BRANCH" \
+              --title "chore: sync upstream FreshRSS $VERSION" \
+              --body "$BODY"
+          fi
