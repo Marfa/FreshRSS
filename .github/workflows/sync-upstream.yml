@@ -24,7 +24,7 @@ concurrency:
 jobs:
   sync:
     name: Open upstream sync PR
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write # Push the bot-managed sync branch
       pull-requests: write # Create or update the sync PR
