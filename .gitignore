@@ -10,6 +10,11 @@
 
 .vscode/
 
+# Local secrets (e.g. RedlistenAPI) — never commit
+.env
+.env.*
+!.env.example
+
 /docs/_site/
 /docs/.sass-cache/
 /docs/.bundle/
