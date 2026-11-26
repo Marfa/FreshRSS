@@ -217,6 +217,7 @@ return array(
 			'request_failed' => 'فشل أحد الطلبات، وقد يكون ذلك بسبب مشكلات في الاتصال بالإنترنت.',
 			'title_new_articles' => 'FreshRSS: مقالات جديدة!',
 		),
+		'instance_update' => 'Update available. Refresh?',	// TODO
 		'labels_empty' => 'لا توجد تسميات',
 		'new_article' => 'توجد مقالات جديدة متاحة، انقر لتحديث الصفحة.',
 		'should_be_activated' => 'يجب تفعيل JavaScript',
